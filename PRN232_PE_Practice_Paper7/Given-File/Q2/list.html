@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Supplier Search</title>
+</head>
+<body>
+    <div class="container search-wrapper">
+        <h2>Supplier Search</h2>
+
+        <form method="get" action="/Supplier">
+            <div class="form-group">
+                <label>Supplier Name:</label>
+                <input type="text" name="name" id="ip_supplierName" placeholder="Alpha">
+            </div>
+
+            <div class="form-group">
+                <label>Specialty:</label>
+                <input type="text" name="specialty" id="ip_specialty" placeholder="dien tu">
+            </div>
+
+            <button type="submit" id="bt_search" class="btn-search">Search</button>
+        </form>
+
+        <table class="supplier-table" border="1" cellpadding="6" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Supplier Name</th>
+                    <th>Specialty</th>
+                    <th>Contract Date</th>
+                    <th>Total Products</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="td_supplierName_1">Cong ty TNHH Alpha</td>
+                    <td id="td_specialty_1">Thiet bi dien tu</td>
+                    <td id="td_contractDate_1">2015-05-10</td>
+                    <td id="td_totalProducts_1">2</td>
+                    <td>
+                        <a href="/Supplier/1" id="a_1">View Products</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="td_supplierName_2">Cong ty CP Beta</td>
+                    <td id="td_specialty_2">Do gia dung</td>
+                    <td id="td_contractDate_2">2018-02-15</td>
+                    <td id="td_totalProducts_2">2</td>
+                    <td>
+                        <a href="/Supplier/2" id="a_2">View Products</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="td_supplierName_3">Tap doan Gamma</td>
+                    <td id="td_specialty_3">Thoi trang</td>
+                    <td id="td_contractDate_3">2010-11-20</td>
+                    <td id="td_totalProducts_3">2</td>
+                    <td>
+                        <a href="/Supplier/3" id="a_3">View Products</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="td_supplierName_4">Cong ty TNHH Delta</td>
+                    <td id="td_specialty_4">Thuc pham sach</td>
+                    <td id="td_contractDate_4">2020-01-05</td>
+                    <td id="td_totalProducts_4">2</td>
+                    <td>
+                        <a href="/Supplier/4" id="a_4">View Products</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="td_supplierName_5">Cong ty CP Epsilon</td>
+                    <td id="td_specialty_5">Van phong pham</td>
+                    <td id="td_contractDate_5">2021-09-12</td>
+                    <td id="td_totalProducts_5">2</td>
+                    <td>
+                        <a href="/Supplier/5" id="a_5">View Products</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
