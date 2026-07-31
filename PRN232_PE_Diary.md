@@ -23,10 +23,14 @@
 ### Phiên 1: Phân tích & Làm Paper 7 (Q1 & Q2)
 
 #### Bài học rút ra từ Q1:
-*Đang cập nhật...*
-
-#### Bài học rút ra từ Q2:
-*Đang cập nhật...*
+1. Lệnh Scaffold Models (nhớ mở đúng project trong PMC):
+`Scaffold-DbContext "Server=...;Database=...;Trusted_Connection=True;Encrypt=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models`
+2. Toán tử 3 ngôi kết hợp `Any()` để chống lỗi `Sequence contains no elements` khi tính trung bình (Average) của list rỗng:
+`c.Orders.Where(o => o.Rating != null).Any() ? c.Orders.Where(o => o.Rating != null).Average(o => o.Rating) : 0`
+3. Công thức phân trang kinh điển: `.Skip((page - 1) * pageSize).Take(pageSize)`
+4. Nếu API yêu cầu nhận Object JSON (có dấu ngoặc nhọn `{}`) -> Bắt buộc phải tạo `Class/DTO` và hứng bằng đúng 1 chữ `[FromBody]`.
 
 #### Những chỗ dễ sai & Kinh nghiệm:
-*Đang cập nhật...*
+- Kiểm tra cực kỹ tên biến lúc xuất JSON (vd: `customerId` chứ không phải `customerid` hay `CustomerId`).
+- Để ý các dấu chấm câu trong chuỗi thông báo lỗi (vd: `"Invalid pagination parameters."` có dấu chấm).
+- KHÔNG dùng 2 từ khóa `[FromBody]` trong cùng 1 hàm.

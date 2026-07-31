@@ -12,13 +12,12 @@ Hãy làm theo từng bước cùng mình nhé!
 ### Bước 1: Chạy lệnh Scaffold Models từ Database
 Trong phòng thi, bạn sẽ không có sẵn folder `Models`, do đó bạn phải tự generate từ file `.sql` đề bài cho.
 - Bước 1.1: Chạy file `database.sql` (nằm trong file zip đề bài) trong SQL Server Management Studio (SSMS) để tạo database.
-- Bước 1.2: Trong Visual Studio, mở **Tools** > **NuGet Package Manager** > **Package Manager Console**.
-- Bước 1.3: Chọn *Default project* là `Q1` ở menu thả xuống.
-- Bước 1.4: Copy lệnh sau dán vào và gõ Enter:
+- Bước 1.2: Mở Terminal ở thư mục gốc của project `Q1`. (Nếu dùng Visual Studio, mở **View > Terminal**).
+- Bước 1.3: Chạy lệnh sau để tạo Models (lưu ý đổi lại tên Server cho đúng máy bạn):
 ```powershell
-Scaffold-DbContext "Server=localhost;Database=PE_PRN_26SP_P7;Trusted_Connection=True;Encrypt=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+dotnet ef dbcontext scaffold "Data Source=LAPTOP-0S0P0DLI\SQL;Initial Catalog=PE_PRN_26SP_P7;User ID=sa;Password=12345;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False" Microsoft.EntityFrameworkCore.SqlServer -o Models
 ```
-*(Lưu ý: Bạn có thể sửa `Server=localhost` thành tên Server SQL của máy bạn, vd: `.\SQLEXPRESS`)*
+*(Nếu máy báo lỗi `dotnet ef` chưa được cài, hãy gõ lệnh: `dotnet tool install --global dotnet-ef` trước, sau đó chạy lại lệnh scaffold).*
 
 Tiếp theo, mở `appsettings.json` trong Q1 và thêm `ConnectionStrings`:
 ```json
@@ -98,15 +97,19 @@ namespace Q1.Controllers
         [HttpGet]
         public IActionResult GetCustomers()
         {
-            // Lấy danh sách khách hàng và tính trung bình Rating (bỏ qua những order có Rating bị NULL)
+            // LINQ xử lý gọn gàng: Dùng toán tử 3 ngôi (Điều_Kiện ? Nếu_Đúng : Nếu_Sai)
             var customers = _context.Customers.Select(c => new
             {
                 customerId = c.CustomerId,
                 customerName = c.CustomerName,
                 email = c.Email,
+                
+                // Lọc bỏ Rating null. 
+                // Nếu Any() trả về True (có order hợp lệ) -> Gọi Average()
+                // Nếu Any() trả về False (không có order nào) -> Trả về 0
                 avgRating = c.Orders.Where(o => o.Rating != null).Any()
                             ? c.Orders.Where(o => o.Rating != null).Average(o => o.Rating)
-                            : 0 // Hoặc có thể để là 0 nếu không có order nào có rating
+                            : 0 
             }).ToList();
 
             return Ok(customers);
@@ -116,7 +119,6 @@ namespace Q1.Controllers
         [HttpGet("/api/customer-loyalty")]
         public IActionResult GetCustomerLoyalty([FromQuery] double? minRating, [FromQuery] string? customerName, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            // Bắt lỗi theo yêu cầu: page hoặc pageSize <= 0 trả về 400
             if (page <= 0 || pageSize <= 0)
             {
                 return BadRequest("Invalid pagination parameters.");
@@ -132,7 +134,6 @@ namespace Q1.Controllers
                             : 0
             }).AsQueryable();
 
-            // Filter logic
             if (minRating.HasValue)
             {
                 query = query.Where(c => c.avgRating >= minRating.Value);
@@ -143,13 +144,10 @@ namespace Q1.Controllers
                 query = query.Where(c => c.customerName.ToLower().Contains(customerName.ToLower()));
             }
 
-            // Pagination metadata
             int totalCustomers = query.Count();
             int totalPages = (int)Math.Ceiling(totalCustomers / (double)pageSize);
-
             var data = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            // Format trả về giống yêu cầu của đề bài
             return Ok(new
             {
                 data = data,
