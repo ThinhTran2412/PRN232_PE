@@ -19,7 +19,7 @@
 
 ---
 
-## 🗓️ Ngày ôn tập: 31/07/2026
+## 🗓️ Ngày ôn tập: 01/08/2026
 ### Phiên 1: Phân tích & Làm Paper 7 (Q1 & Q2)
 
 #### Bài học rút ra từ Q1:
