@@ -34,3 +34,14 @@
 - Kiểm tra cực kỹ tên biến lúc xuất JSON (vd: `customerId` chứ không phải `customerid` hay `CustomerId`).
 - Để ý các dấu chấm câu trong chuỗi thông báo lỗi (vd: `"Invalid pagination parameters."` có dấu chấm).
 - KHÔNG dùng 2 từ khóa `[FromBody]` trong cùng 1 hàm.
+
+#### Bài học rút ra từ Q2 (Razor Pages & HttpClient):
+1. **Tuyệt chiêu Model Binding cho form GET:** Dùng `[BindProperty(SupportsGet = true)]` cho các tham số search để tự động hứng dữ liệu từ URL xuống thẳng biến C# (rất nhàn, khỏi cần móc từ QueryString).
+2. **Copy Y Nguyên Giao Diện Của Đề:** Nếu đề cho sẵn các file `list.html` và `detail.html`, hãy lấy toàn bộ HTML dán ngay bên dưới `@model` (tuyệt đối KHÔNG nhét HTML vào lồng `@{ }`). Sau đó mới dùng `@foreach` để biến tĩnh thành động.
+3. **Format ngày tháng:** Bắt buộc ép kiểu `ToString("yyyy-MM-dd")` cho ngày tháng hiển thị trên View để qua ải máy chấm (nếu nullable thì dùng `?.ToString("yyyy-MM-dd")`).
+4. **Quy tắc đúc khuôn JSON (Deserialize):**
+   - Đọc kỹ cấu trúc JSON trả về từ Postman/Swagger hoặc đọc đề bài phân tích.
+   - Nếu JSON trả mảng `[ ]` ngoài cùng -> Dùng `List<ClassName>`.
+   - Nếu JSON trả mảng `[ ]` lồng bên trong một mảng khác -> C# phải khai báo một biến kiểu `public List<...> TênBiến { get; set; }` nằm bên trong Class bọc ngoài.
+   - Nhớ bật bùa `PropertyNameCaseInsensitive = true` để chống lỗi viết hoa/thường, nhưng khi làm bài vẫn nên Copy đúng y xì đúc 100% tên biến của JSON sang.
+5. **Cạm bẫy thẻ Input:** Thường hay bị ảo tưởng các Dropdown là thẻ `<select>`, nhưng nhớ phải "Soi" thật kỹ yêu cầu đề thi (phần `Summary of HTML Elements ID`). Nó bảo `<input>` thì bắt buộc phải để là `<input type="text">`. Đừng tự "chế" bậy bạ.
