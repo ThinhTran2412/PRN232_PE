@@ -19,8 +19,8 @@
 
 ---
 
-## 🗓️ Ngày ôn tập: 01/08/2026
-### Phiên 1: Phân tích & Làm Paper 7 (Q1 & Q2)
+## 🗓️ Ngày ôn tập: 31/07/2026
+### Phiên 1: Phân tích & Làm Paper 7 (Q1)
 
 #### Bài học rút ra từ Q1:
 1. Lệnh Scaffold Models (nhớ mở đúng project trong PMC):
@@ -34,6 +34,11 @@
 - Kiểm tra cực kỹ tên biến lúc xuất JSON (vd: `customerId` chứ không phải `customerid` hay `CustomerId`).
 - Để ý các dấu chấm câu trong chuỗi thông báo lỗi (vd: `"Invalid pagination parameters."` có dấu chấm).
 - KHÔNG dùng 2 từ khóa `[FromBody]` trong cùng 1 hàm.
+
+---
+
+## 🗓️ Ngày ôn tập: 01/08/2026
+### Phiên 2: Hoàn thiện Paper 7 (Q2 - Razor Pages)
 
 #### Bài học rút ra từ Q2 (Razor Pages & HttpClient):
 1. **Tuyệt chiêu Model Binding cho form GET:** Dùng `[BindProperty(SupportsGet = true)]` cho các tham số search để tự động hứng dữ liệu từ URL xuống thẳng biến C# (rất nhàn, khỏi cần móc từ QueryString).
