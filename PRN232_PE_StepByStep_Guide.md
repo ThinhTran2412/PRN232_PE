@@ -340,55 +340,72 @@ namespace Q2.Pages.Supplier
 ```
 
 Tạo file `Index.cshtml`:
-**LƯU Ý:** Quan trọng nhất của bài này là **TẤT CẢ ID PHẢI ĐÚNG 100% YÊU CẦU**.
+**MẸO CỰC HAY:** Đề bài luôn cho sẵn file HTML (vd: `list.html`). Bạn hãy **COPY Y NGUYÊN TOÀN BỘ FILE HTML ĐÓ** dán vào bên dưới dòng `@model`, sau đó tìm đến `<input specialty>` sửa thành `<select>`, và tìm đến `<tbody>` để sửa thành vòng lặp `@foreach`.
+
 ```html
 @page
 @model Q2.Pages.Supplier.IndexModel
 @{
+    // Không được để thẻ HTML lọt vào trong cặp ngoặc nhọn này
 }
 
-<h2>Search Suppliers</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Supplier Search</title>
+</head>
+<body>
+    <div class="container search-wrapper">
+        <h2>Supplier Search</h2>
 
-<form method="get">
-    <div>
-        <label>Supplier Name:</label>
-        <input type="text" name="Name" id="ip_supplierName" value="@Model.Name" />
+        <!-- Khúc form này nhớ giữ lại action="/Supplier" -->
+        <form method="get" action="/Supplier">
+            <div class="form-group">
+                <label>Supplier Name:</label>
+                <!-- Thêm value="@Model.Name" để gõ xong bấm search nó không bị mất chữ -->
+                <input type="text" name="name" id="ip_supplierName" placeholder="Alpha" value="@Model.Name">
+            </div>
+
+            <div class="form-group">
+                <label>Specialty:</label>
+                <!-- Giữ nguyên thẻ <input> theo đúng yêu cầu đề bài -->
+                <input type="text" name="specialty" id="ip_specialty" placeholder="dien tu" value="@Model.Specialty">
+            </div>
+
+            <button type="submit" id="bt_search" class="btn-search">Search</button>
+        </form>
+
+        <table class="supplier-table" border="1" cellpadding="6" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Supplier Name</th>
+                    <th>Specialty</th>
+                    <th>Contract Date</th>
+                    <th>Total Products</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <!-- ĐÃ SỬA 2: Xóa các dòng <tr> giả đi, thay bằng vòng lặp @foreach đổ dữ liệu thật -->
+            <tbody>
+                @foreach (var s in Model.Suppliers)
+                {
+                    <tr>
+                        <td id="td_supplierName_@s.supplierId">@s.supplierName</td>
+                        <td id="td_specialty_@s.supplierId">@s.specialty</td>
+                        <td id="td_contractDate_@s.supplierId">@(s.contractDate.ToString("yyyy-MM-dd"))</td>
+                        <td id="td_totalProducts_@s.supplierId">@s.totalProducts</td>
+                        <td>
+                            <!-- Chú ý ID của nút bấm theo đúng yêu cầu đề bài -->
+                            <a href="/Supplier/Details?id=@s.supplierId" id="a_@s.supplierId">View Products</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-    <div>
-        <label>Specialty:</label>
-        <input type="text" name="Specialty" id="ip_specialty" value="@Model.Specialty" />
-    </div>
-    <button type="submit" id="bt_search">Search</button>
-</form>
-
-<hr />
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>Supplier Name</th>
-            <th>Specialty</th>
-            <th>Contract Date</th>
-            <th>Total Products</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var s in Model.Suppliers)
-        {
-            <tr>
-                <td id="td_supplierName_@(s.supplierId)">@s.supplierName</td>
-                <td id="td_specialty_@(s.supplierId)">@s.specialty</td>
-                <td id="td_contractDate_@(s.supplierId)">@s.contractDate.ToString("yyyy-MM-dd")</td>
-                <td id="td_totalProducts_@(s.supplierId)">@s.totalProducts</td>
-                <td>
-                    <!-- Đề bài yêu cầu ID chuẩn là a_{supplierId} -->
-                    <a id="a_@(s.supplierId)" href="/Supplier/Details?id=@s.supplierId">View Products</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+</body>
+</html>
 ```
 *(Lưu ý: Bạn có thể thay đổi routing của trang detail là `/Supplier/{SupplierId}` thay vì query string nếu cấu hình Route `[page "{id}"]` trong `Details.cshtml`)*
 

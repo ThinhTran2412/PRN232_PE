@@ -1,0 +1,36 @@
+﻿@page "{id:int?}"
+@model Q2.Pages.Supplier.DetailsModel
+@{
+}
+
+<!-- ID cho thẻ span đặc biệt quan trọng -->
+<h3>Supplier Details</h3>
+<div>
+    <strong>Supplier ID:</strong> <span id="span_@(Model.SupplierInfo.supplierId)">@Model.SupplierInfo.supplierId</span><br/>
+    <strong>Name:</strong> <span id="span_@(Model.SupplierInfo.supplierName)">@Model.SupplierInfo.supplierName</span><br/>
+    <strong>Specialty:</strong> <span id="span_@(Model.SupplierInfo.specialty)">@Model.SupplierInfo.specialty</span>
+</div>
+
+<hr />
+<h4>Products</h4>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.SupplierInfo.products)
+        {
+            <tr>
+                <td id="td_productID_@(p.productID)">@p.productID</td>
+                <td id="td_productName_@(p.productID)">@p.productName</td>
+                <td id="td_price_@(p.productID)">@p.price</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Supplier">Back to List</a>
