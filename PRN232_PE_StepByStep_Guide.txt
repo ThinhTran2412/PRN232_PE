@@ -1,26 +1,22 @@
-# Hướng dẫn từng bước làm bài thi PRN232 - Paper 7
+Hướng dẫn từng bước làm bài thi PRN232 - Paper 7
 
-Tài liệu này sẽ hướng dẫn bạn từ lúc mở project `GivenSolution` cho đến khi hoàn thiện 100% hai câu Q1 và Q2 mà không viết code dư thừa, tránh tối đa các lỗi thường gặp (đặc biệt là lỗi đặt sai Id thẻ HTML ở Q2). 
+Tài liệu này sẽ hướng dẫn bạn từ lúc mở project GivenSolution cho đến khi hoàn thiện 100% hai câu Q1 và Q2 mà không viết code dư thừa, tránh tối đa các lỗi thường gặp (đặc biệt là lỗi đặt sai Id thẻ HTML ở Q2). 
 
 Hãy làm theo từng bước cùng mình nhé!
 
----
 
-## 🎯 CÂU 1 (Q1) - XÂY DỰNG WEB API
+🎯 CÂU 1 (Q1) - XÂY DỰNG WEB API
 
-### Bước 1: Khôi phục Models & Cấu hình Connection String
-### Bước 1: Chạy lệnh Scaffold Models từ Database
-Trong phòng thi, bạn sẽ không có sẵn folder `Models`, do đó bạn phải tự generate từ file `.sql` đề bài cho.
-- Bước 1.1: Chạy file `database.sql` (nằm trong file zip đề bài) trong SQL Server Management Studio (SSMS) để tạo database.
-- Bước 1.2: Mở Terminal ở thư mục gốc của project `Q1`. (Nếu dùng Visual Studio, mở **View > Terminal**).
+Bước 1: Khôi phục Models & Cấu hình Connection String
+Bước 1: Chạy lệnh Scaffold Models từ Database
+Trong phòng thi, bạn sẽ không có sẵn folder Models, do đó bạn phải tự generate từ file .sql đề bài cho.
+- Bước 1.1: Chạy file database.sql (nằm trong file zip đề bài) trong SQL Server Management Studio (SSMS) để tạo database.
+- Bước 1.2: Mở Terminal ở thư mục gốc của project Q1. (Nếu dùng Visual Studio, mở View > Terminal).
 - Bước 1.3: Chạy lệnh sau để tạo Models (lưu ý đổi lại tên Server cho đúng máy bạn):
-```powershell
 dotnet ef dbcontext scaffold "Data Source=LAPTOP-0S0P0DLI\SQL;Initial Catalog=PE_PRN_26SP_P7;User ID=sa;Password=12345;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False" Microsoft.EntityFrameworkCore.SqlServer -o Models
-```
-*(Nếu máy báo lỗi `dotnet ef` chưa được cài, hãy gõ lệnh: `dotnet tool install --global dotnet-ef` trước, sau đó chạy lại lệnh scaffold).*
+(Nếu máy báo lỗi dotnet ef chưa được cài, hãy gõ lệnh: dotnet tool install --global dotnet-ef trước, sau đó chạy lại lệnh scaffold).
 
-Tiếp theo, mở `appsettings.json` trong Q1 và thêm `ConnectionStrings`:
-```json
+Tiếp theo, mở appsettings.json trong Q1 và thêm ConnectionStrings:
 {
   "Logging": {
     "LogLevel": {
@@ -33,13 +29,10 @@ Tiếp theo, mở `appsettings.json` trong Q1 và thêm `ConnectionStrings`:
     "MyCnn": "Server=localhost;Database=PE_PRN_26SP_P7;Trusted_Connection=True;Encrypt=False"
   }
 }
-```
-*(Lưu ý: Thay đổi phần `Server=localhost` cho phù hợp với tên Server trên máy bạn).*
+(Lưu ý: Thay đổi phần Server=localhost cho phù hợp với tên Server trên máy bạn).
 
-### Bước 2: Cấu hình `Program.cs`
-Đề bài yêu cầu API `/api/customers` phải hỗ trợ trả về cả **JSON và XML**. Do đó, bạn cần sửa `builder.Services.AddControllers()` thành:
+Bước 2: Cấu hình Program.csĐề bài yêu cầu API /api/customers phải hỗ trợ trả về cả JSON và XML. Do đó, bạn cần sửa builder.Services.AddControllers() thành:
 
-```csharp
 using Microsoft.EntityFrameworkCore;
 using Q1.Models;
 
@@ -70,13 +63,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-```
+Bước 3: Tạo CustomersController.csTạo folder Controllers trong Q1, sau đó add class CustomersController.cs. 
+Chúng ta cần giải quyết 2 API: GET /api/customers và GET /api/customer-loyalty.
 
-### Bước 3: Tạo `CustomersController.cs`
-Tạo folder `Controllers` trong Q1, sau đó add class `CustomersController.cs`. 
-Chúng ta cần giải quyết 2 API: `GET /api/customers` và `GET /api/customer-loyalty`.
-
-```csharp
 using Microsoft.AspNetCore.Mvc;
 using Q1.Models;
 
@@ -159,12 +148,8 @@ namespace Q1.Controllers
         }
     }
 }
-```
+Bước 4: Tạo OrdersController.csXử lý các logic cập nhật rating và xóa (cancel) order. Đặc biệt cẩn thận các mã lỗi 400, 404, 204.
 
-### Bước 4: Tạo `OrdersController.cs`
-Xử lý các logic cập nhật rating và xóa (cancel) order. Đặc biệt cẩn thận các mã lỗi 400, 404, 204.
-
-```csharp
 using Microsoft.AspNetCore.Mvc;
 using Q1.Models;
 
@@ -234,15 +219,10 @@ namespace Q1.Controllers
         }
     }
 }
-```
 
----
+🎯 CÂU 2 (Q2) - RAZOR PAGES & HTTPCLIENT
 
-## 🎯 CÂU 2 (Q2) - RAZOR PAGES & HTTPCLIENT
-
-### Bước 1: Cấu hình `appsettings.json` và `Program.cs`
-Thêm URL theo đúng yêu cầu đề vào `appsettings.json`:
-```json
+Bước 1: Cấu hình appsettings.json và Program.csThêm URL theo đúng yêu cầu đề vào appsettings.json:
 {
   "Logging": {
     "LogLevel": {
@@ -253,11 +233,9 @@ Thêm URL theo đúng yêu cầu đề vào `appsettings.json`:
   "AllowedHosts": "*",
   "GivenAPIBaseUrl": "http://localhost:5100"
 }
-```
-Mở `Program.cs` của Q2 (Thường project có sẵn đã add `builder.Services.AddRazorPages();`, nếu thiếu bạn hãy chắc chắn rằng nó có đủ).
-Đồng thời, thêm `builder.Services.AddHttpClient();` để dùng `IHttpClientFactory`.
+Mở Program.cs của Q2 (Thường project có sẵn đã add builder.Services.AddRazorPages();, nếu thiếu bạn hãy chắc chắn rằng nó có đủ).
+Đồng thời, thêm builder.Services.AddHttpClient(); để dùng IHttpClientFactory.
 
-```csharp
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -268,16 +246,10 @@ var app = builder.Build();
 ...
 app.MapRazorPages();
 app.Run();
-```
-
-### Bước 2: Bố trí thư mục `Pages/Supplier`
-Tạo thư mục `Supplier` bên trong `Pages`. Trong thư mục này, ta tạo 2 trang:
-- `Index.cshtml` & `Index.cshtml.cs`
-- `Details.cshtml` & `Details.cshtml.cs`
-
-#### A. Trang Danh Sách (Index)
-Tạo file `Index.cshtml.cs`:
-```csharp
+Bước 2: Bố trí thư mục Pages/SupplierTạo thư mục Supplier bên trong Pages. Trong thư mục này, ta tạo 2 trang:
+- Index.cshtml & Index.cshtml.cs- Details.cshtml & Details.cshtml.cs
+A. Trang Danh Sách (Index)
+Tạo file Index.cshtml.cs:
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
@@ -337,12 +309,9 @@ namespace Q2.Pages.Supplier
         public int totalProducts { get; set; }
     }
 }
-```
+Tạo file Index.cshtml:
+MẸO CỰC HAY: Đề bài luôn cho sẵn file HTML (vd: list.html). Bạn hãy COPY Y NGUYÊN TOÀN BỘ FILE HTML ĐÓ dán vào bên dưới dòng @model, sau đó tìm đến <input specialty> sửa thành <select>, và tìm đến <tbody> để sửa thành vòng lặp @foreach.
 
-Tạo file `Index.cshtml`:
-**MẸO CỰC HAY:** Đề bài luôn cho sẵn file HTML (vd: `list.html`). Bạn hãy **COPY Y NGUYÊN TOÀN BỘ FILE HTML ĐÓ** dán vào bên dưới dòng `@model`, sau đó tìm đến `<input specialty>` sửa thành `<select>`, và tìm đến `<tbody>` để sửa thành vòng lặp `@foreach`.
-
-```html
 @page
 @model Q2.Pages.Supplier.IndexModel
 @{
@@ -406,12 +375,10 @@ Tạo file `Index.cshtml`:
     </div>
 </body>
 </html>
-```
-*(Lưu ý: Bạn có thể thay đổi routing của trang detail là `/Supplier/{SupplierId}` thay vì query string nếu cấu hình Route `[page "{id}"]` trong `Details.cshtml`)*
+(Lưu ý: Bạn có thể thay đổi routing của trang detail là /Supplier/{SupplierId} thay vì query string nếu cấu hình Route [page "{id}"] trong Details.cshtml)
 
-#### B. Trang Chi Tiết (Details)
-Tạo file `Details.cshtml.cs`:
-```csharp
+B. Trang Chi Tiết (Details)
+Tạo file Details.cshtml.cs:
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
@@ -465,10 +432,7 @@ namespace Q2.Pages.Supplier
         public int price { get; set; }
     }
 }
-```
-
-Tạo file `Details.cshtml`:
-```html
+Tạo file Details.cshtml:
 @page "{id:int?}"
 @model Q2.Pages.Supplier.DetailsModel
 @{
@@ -505,23 +469,19 @@ Tạo file `Details.cshtml`:
 </table>
 
 <a href="/Supplier">Back to List</a>
-```
-*(Nếu bạn cấu hình `@page "{id:int?}"` thì link từ trang Index sửa thành `href="/Supplier/Details/@s.supplierId"` sẽ rất đẹp và chuẩn)*
+(Nếu bạn cấu hình @page "{id:int?}" thì link từ trang Index sửa thành href="/Supplier/Details/@s.supplierId" sẽ rất đẹp và chuẩn)
 
----
 
 Đó là toàn bộ luồng code. Bạn thấy đoạn nào chưa rõ hoặc muốn tự tay gõ vào chỗ nào trước, thì cứ bảo tui. Khi bạn làm xong Q1, hãy test thử trên Postman/Swagger trước khi qua Q2 nhé!
 
----
 
-## 💡 PHỤ LỤC: DỰ TRÙ CÁC CÂU HỎI THƯỜNG GẶP (Count, Average, Sum, PATCH, PUT, POST, Route)
+💡 PHỤ LỤC: DỰ TRÙ CÁC CÂU HỎI THƯỜNG GẶP (Count, Average, Sum, PATCH, PUT, POST, Route)
 
 Dưới đây là một số đoạn code mẫu cho các yêu cầu thường gặp trong đề thi PE:
 
-### 1. Xử lý LINQ (Count, Average, Sum)
-Khi đề bài yêu cầu tính toán dựa trên các record liên quan (ví dụ: Tổng số đơn hàng, Điểm trung bình, Tổng tiền...), luôn dùng toán tử 3 ngôi kết hợp `.Any()` để tránh lỗi chia cho 0 hoặc lỗi Null.
+1. Xử lý LINQ (Count, Average, Sum)
+Khi đề bài yêu cầu tính toán dựa trên các record liên quan (ví dụ: Tổng số đơn hàng, Điểm trung bình, Tổng tiền...), luôn dùng toán tử 3 ngôi kết hợp .Any() để tránh lỗi chia cho 0 hoặc lỗi Null.
 
-```csharp
 // Giả sử có 1 List<Customer> c, và mỗi Customer có nhiều Orders
 var data = _context.Customers.Select(c => new
 {
@@ -543,12 +503,9 @@ var data = _context.Customers.Select(c => new
     // Tổng số tiền của các Order (nếu có Order thì Sum, không thì 0)
     TotalAmount = c.Orders.Any() ? c.Orders.Sum(o => o.Total) : 0
 }).ToList();
-```
+2. Các phương thức HTTP (POST, PUT, PATCH, DELETE)
 
-### 2. Các phương thức HTTP (POST, PUT, PATCH, DELETE)
-
-#### A. POST (Thêm mới 1 record)
-```csharp
+A. POST (Thêm mới 1 record)
 [HttpPost]
 public IActionResult CreateData([FromBody] DataRequest request)
 {
@@ -563,10 +520,7 @@ public IActionResult CreateData([FromBody] DataRequest request)
     
     return Ok(newData); // Hoặc return CreatedAtAction(...)
 }
-```
-
-#### B. PUT (Cập nhật toàn bộ/nhiều trường của record)
-```csharp
+B. PUT (Cập nhật toàn bộ/nhiều trường của record)
 [HttpPut("{id}")]
 public IActionResult UpdateData(int id, [FromBody] DataRequest request)
 {
@@ -583,11 +537,8 @@ public IActionResult UpdateData(int id, [FromBody] DataRequest request)
     _context.SaveChanges();
     return Ok(data);
 }
-```
-
-#### C. PATCH (Cập nhật 1 phần / 1 trường cụ thể)
-Đề thi thi thoảng yêu cầu đổi status hoặc 1 thuộc tính. Dùng `HttpPatch`.
-```csharp
+C. PATCH (Cập nhật 1 phần / 1 trường cụ thể)
+Đề thi thi thoảng yêu cầu đổi status hoặc 1 thuộc tính. Dùng HttpPatch.
 [HttpPatch("{id}/status")] // Ví dụ: /api/orders/1/status
 public IActionResult UpdateStatus(int id, [FromBody] StatusRequest request)
 {
@@ -602,25 +553,19 @@ public IActionResult UpdateStatus(int id, [FromBody] StatusRequest request)
     
     return Ok(order);
 }
-```
+3. Route & Query Parameters
 
-### 3. Route & Query Parameters
-
-#### Route Parameters (Biến truyền trên URL)
+Route Parameters (Biến truyền trên URL)
 - Dùng khi lấy chi tiết 1 đối tượng, hoặc thao tác trên 1 ID cụ thể.
-- Khai báo `{id}` trong `[HttpGet("{id}")]`, tham số hàm tương ứng.
-```csharp
+- Khai báo {id} trong [HttpGet("{id}")], tham số hàm tương ứng.
 [HttpGet("{id}")] // /api/customers/5
 public IActionResult GetCustomerById(int id)
 {
     // ...
 }
-```
-
-#### Query Parameters (Truy vấn theo điều kiện ?key=value)
+Query Parameters (Truy vấn theo điều kiện ?key=value)
 - Dùng cho tìm kiếm, lọc, phân trang.
-- Thêm `[FromQuery]` trước biến.
-```csharp
+- Thêm [FromQuery] trước biến.
 [HttpGet("search")] // /api/customers/search?name=abc&minPrice=10
 public IActionResult SearchCustomers([FromQuery] string name, [FromQuery] decimal? minPrice)
 {
@@ -638,4 +583,3 @@ public IActionResult SearchCustomers([FromQuery] string name, [FromQuery] decima
     
     return Ok(query.ToList());
 }
-```
