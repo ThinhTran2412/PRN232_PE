@@ -1,0 +1,38 @@
+@page "/Instructor/{id:int}"
+@model Q2.Pages.Instructor.DetailsModel
+@{
+}
+
+<h3>Instructor Details</h3>
+@if (Model.InstructorInfo != null)
+{
+    <div>
+        <strong>Instructor ID:</strong> <span id="span_@(Model.InstructorInfo.InstructorId)">@Model.InstructorInfo.InstructorId</span><br/>
+        <strong>Name:</strong> <span id="span_@(Model.InstructorInfo.InstructorName)">@Model.InstructorInfo.InstructorName</span><br/>
+        <strong>Department:</strong> <span id="span_@(Model.InstructorInfo.Department)">@Model.InstructorInfo.Department</span>
+    </div>
+
+    <hr />
+    <h4>Taught Courses</h4>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Course ID</th>
+                <th>Title</th>
+                <th>Credits</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model.InstructorInfo.Courses)
+            {
+                <tr>
+                    <td id="td_courseID_@(c.CourseId)">@c.CourseId</td>
+                    <td id="td_title_@(c.CourseId)">@c.Title</td>
+                    <td id="td_credits_@(c.CourseId)">@c.Credits</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a href="/Instructor">Back to List</a>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Instructor Search</title>
+</head>
+<body>
+    <div class="container search-wrapper">
+        <h2>Instructor Search</h2>
+
+        <form method="get" action="/Instructor">
+            <div class="form-group">
+                <label>Instructor Name:</label>
+                <input type="text" name="name" id="ip_instructorName" placeholder="Nguyen Van A">
+            </div>
+
+            <div class="form-group">
+                <label>Department:</label>
+                <input type="text" name="department" id="ip_department" placeholder="Software Engineering">
+            </div>
+
+            <button type="submit" id="bt_search" class="btn-search">Search</button>
+        </form>
+
+        <table class="instructor-table" border="1" cellpadding="6" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Instructor Name</th>
+                    <th>Department</th>
+                    <th>Hire Date</th>
+                    <th>Total Courses</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="td_instructorName_1">Nguyen Van A</td>
+                    <td id="td_department_1">Software Engineering</td>
+                    <td id="td_hireDate_1">2020-01-15</td>
+                    <td id="td_totalCourses_1">2</td>
+                    <td>
+                        <a href="/Instructor/1" id="a_1">View Courses</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="td_instructorName_2">Tran Thi B</td>
+                    <td id="td_department_2">Information Assurance</td>
+                    <td id="td_hireDate_2">2021-06-20</td>
+                    <td id="td_totalCourses_2">1</td>
+                    <td>
+                        <a href="/Instructor/2" id="a_2">View Courses</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="td_instructorName_3">Le Van C</td>
+                    <td id="td_department_3">Software Engineering</td>
+                    <td id="td_hireDate_3">2022-09-01</td>
+                    <td id="td_totalCourses_3">1</td>
+                    <td>
+                        <a href="/Instructor/3" id="a_3">View Courses</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
