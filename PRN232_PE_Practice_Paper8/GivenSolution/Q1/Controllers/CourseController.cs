@@ -1,44 +1,42 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Q1.Models;
 
 namespace Q1.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/courses")]
     [ApiController]
-    public class CoursesController : ControllerBase
+    public class CourseController : Controller
     {
         private readonly PePrn26spP8Context _context;
 
-        public CoursesController(PePrn26spP8Context context)
+        public CourseController(PePrn26spP8Context context)
         {
             _context = context;
         }
 
         [HttpGet("catalog")]
-        public IActionResult GetCatalog([FromQuery] string? department, [FromQuery] int minCredits = 0)
+        public IActionResult GetCourseCatalog([FromQuery] double? minAverageGrade)
         {
-            var query = _context.Courses.Select(c => new
+            var course = _context.Courses.Select(c => new
             {
                 courseId = c.CourseId,
                 title = c.Title,
-                credits = c.Credits,
-                department = c.Instructor != null ? c.Instructor.Department : null,
+                credit = c.Credits,
+                instructorName = c.Instructor != null ? c.Instructor.InstructorName : "",
+                averageGrade = c.Enrollments.Any(e => e.Grade != null) ? c.Enrollments.Where(e => e.Grade != null).Average(e => e.Grade) : 0,
                 totalEnrolled = c.Enrollments.Count(),
-                gradeSum = c.Enrollments.Sum(e => e.Grade),
-                averageGrade = c.Enrollments.Average(e => e.Grade)
+                gradeSum = c.Enrollments.Any(e => e.Grade != null) ? c.Enrollments.Where(e => e.Grade != null).Sum(e => e.Grade) : 0
+
             }).AsQueryable();
 
-            if (!string.IsNullOrEmpty(department))
+            if (minAverageGrade.HasValue)
             {
-                query = query.Where(q => q.department != null && q.department.Contains(department));
+                course = course.Where(c => c.averageGrade > minAverageGrade);
             }
 
-            if (minCredits > 0)
-            {
-                query = query.Where(q => q.credits >= minCredits);
-            }
+            course = course.OrderByDescending(x => x.averageGrade).ThenBy(x => x.title);
 
-            return Ok(query.ToList());
+            return Ok(course.ToList());
         }
     }
 }
