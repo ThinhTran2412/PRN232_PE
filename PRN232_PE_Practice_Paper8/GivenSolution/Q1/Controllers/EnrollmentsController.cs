@@ -94,5 +94,37 @@ namespace Q1.Controllers
 
             return NoContent();
         }
+
+        public class UpdateGradeRequest
+        {
+            public double? Grade { get; set; }
+        }
+
+        [HttpPatch("{enrollmentId}")]
+        public IActionResult UpdateGrade(int enrollmentId, [FromBody] UpdateGradeRequest req)
+        {
+            var enrollment = _context.Enrollments.FirstOrDefault(e => e.EnrollmentId == enrollmentId);
+            if (enrollment == null)
+            {
+                return NotFound("No enrollment found with provided EnrollmentId");
+            }
+
+            if (req.Grade < 0 || req.Grade > 10)
+            {
+                return BadRequest("Grade must be between 0 and 10");
+            }
+
+            enrollment.Grade = req.Grade;
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                enrollmentId = enrollment.EnrollmentId,
+                studentId = enrollment.StudentId,
+                courseId = enrollment.CourseId,
+                semester = enrollment.Semester,
+                grade = enrollment.Grade
+            });
+        }
     }
 }
